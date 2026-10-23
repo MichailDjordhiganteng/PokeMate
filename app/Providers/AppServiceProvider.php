@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Rental;
 use App\Services\RentalService;
+use App\View\Composers\LandingPageComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer('landing', LandingPageComposer::class);
+
         View::composer('layouts.app', function ($view) {
             $user = auth()->user();
             $user?->loadMissing('trainerProfile');

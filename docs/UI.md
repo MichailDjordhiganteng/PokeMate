@@ -12,6 +12,7 @@
 
 | Area | Penyesuaian |
 | --- | --- |
+| Landing publik (brief tambahan) | Layout SaaS/adventure khusus dengan hero dua kolom, companion preview, statistik asli, 3 langkah, featured partners, type explorer, manfaat 2×2, CTA dan footer. Lihat `docs/LANDING.md`. |
 | Layout admin | Sidebar navy 288px, navigasi aktif kuning, topbar pencarian/tanggal, jumlah pengembalian, identitas admin, logout, drawer pada HP. |
 | Dashboard admin | Hero operasional, 8 KPI, donut distribusi status, grafik rental/pengembalian 7 hari, pintasan, tabel transaksi terbaru. Statistik diambil dari database. |
 | Inventaris Pokémon | KPI inventaris, filter tipe/status/urutan, thumbnail partner, badge elemen berwarna, status, tombol edit/hapus, form tipe berbentuk pilihan chip. |
@@ -45,7 +46,7 @@
 - Halaman tamu/admin/trainer diperiksa pada viewport **1440 × 1000** dan **390 × 1000**.
 - Login, akses peran, menu mobile, modal tipe, validasi modal, durasi 5 hari, dan alur form → konfirmasi diuji di browser.
 - Audit akhir tidak menemukan error JavaScript atau overflow horizontal dokumen.
-- PHPUnit: **24 tes lulus, 327 assertions**, termasuk filter tipe/status, urutan berdasarkan nilai database, tautan detail rental per peran, dan proteksi kepemilikan trainer.
+- PHPUnit terbaru: **27 tes lulus, 358 assertions**, termasuk data landing publik/fallback kosong, filter tipe/status, urutan berdasarkan nilai database, tautan detail rental per peran, dan proteksi kepemilikan trainer.
 - Blade cache, Laravel Pint, dan `git diff --check` berhasil.
 - Rumus rental/denda, pembatasan peran, dan proteksi riwayat tetap berlaku. Tidak diperlukan migrasi tambahan untuk perubahan UI ini.
 

@@ -29,7 +29,9 @@
     <link rel="stylesheet" href="{{ asset('css/stitch-ui.css') }}?v={{ filemtime(public_path('css/stitch-ui.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/feedback.css') }}?v={{ filemtime(public_path('css/feedback.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/interactions.css') }}?v={{ filemtime(public_path('css/interactions.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/audio-player.css') }}?v={{ filemtime(public_path('css/audio-player.css')) }}">
     @foreach(['feedback', 'form-validation', 'site', 'interactions'] as $script)<script src="{{ asset('js/'.$script.'.js') }}?v={{ filemtime(public_path('js/'.$script.'.js')) }}" defer></script>@endforeach
+    <script src="{{ asset('js/audio-player.js') }}?v={{ filemtime(public_path('js/audio-player.js')) }}" defer></script>
 </head>
 <body class="{{ $adminLayout ? 'admin-layout' : ($authLayout ? 'auth-layout' : 'trainer-layout') }}">
 <a class="skip-link" href="#main-content">Langsung ke konten</a>
@@ -75,5 +77,6 @@
 @endunless
 @include('partials.confirm-dialog')
 @include('partials.notification-templates')
+@include('partials.audio-player')
 @stack('scripts')
 </body></html>

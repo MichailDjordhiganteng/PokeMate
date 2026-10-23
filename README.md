@@ -4,6 +4,10 @@ Aplikasi rental Pokémon berbasis Laravel 12 (PHP 8.2+). Dua peran: **admin** da
 
 UI telah disesuaikan dengan ekspor Stitch: sidebar admin, dashboard statistik/grafik, tabel dan modal operasional, login/register dua kolom, katalog berwarna berdasarkan tipe, kartu Adventure Match, checkout, tiket rental, dan profil trainer. Rincian acuan, komponen, dan verifikasi ada di `docs/UI.md`. Perubahan UI tidak memerlukan migrasi database tambahan.
 
+Landing publik kini memakai layout pemasaran premium tersendiri: hero dua kolom dengan companion preview, featured Pokémon dari database, type explorer, manfaat, dan CTA. Navbar sticky, reveal, serta hover responsif dibangun tanpa library animasi tambahan. Lihat `docs/LANDING.md` untuk struktur komponen, sumber data, dan hasil pengujian.
+
+Backsound **Pokémon Red/Blue Opening** tersedia melalui dock musik di kanan bawah pada landing dan halaman aplikasi. Sistem mencoba autoplay pada kunjungan pertama; jika browser memblokir, klik halaman atau tekan **Lanjutkan musik** untuk memulai loop. Volume, mute, pilihan mati, dan posisi lagu disimpan di browser. Rincian penggunaan dan pemulihan audio saat navigasi ada di `docs/AUDIO.md`.
+
 ## Menjalankan secara lokal
 
 ```bash

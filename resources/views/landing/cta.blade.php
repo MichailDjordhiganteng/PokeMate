@@ -1,0 +1,3 @@
+<section class="lp-container lp-cta-wrap" aria-labelledby="cta-title" data-reveal>
+    <div class="lp-cta"><span class="lp-cta-watermark" aria-hidden="true"></span><div><span class="lp-eyebrow lp-eyebrow--light">The next chapter is yours.</span><h2 id="cta-title">Ready for your next <span>adventure?</span></h2><p>Temukan Pokémon partner yang tepat dan mulai perjalananmu hari ini.</p></div><div class="lp-cta-action"><a class="lp-button lp-button--primary" href="{{ $adventureUrl }}">Start Your Adventure <x-icon name="arrow" /></a><span><x-icon name="pokemon" />Your perfect partner is out there.</span></div></div>
+</section>

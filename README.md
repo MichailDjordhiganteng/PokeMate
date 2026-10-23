@@ -945,7 +945,8 @@ docs/
 > Tambahkan screenshot Login.
 
 ```markdown
-![Login](docs/screenshots/login.png)
+<img width="828" height="659" alt="image" src="https://github.com/user-attachments/assets/4f26252f-5660-4f65-a88b-6321736e621a" />
+
 ```
 
 ## Trainer Dashboard
@@ -953,7 +954,8 @@ docs/
 > Tambahkan screenshot Trainer Dashboard.
 
 ```markdown
-![Trainer Dashboard](docs/screenshots/trainer-dashboard.png)
+<img width="415" height="632" alt="image" src="https://github.com/user-attachments/assets/968d7cf0-72cf-4979-8cad-90dba020200b" />
+
 ```
 
 ## Pokémon Catalogue
@@ -961,7 +963,8 @@ docs/
 > Tambahkan screenshot Pokémon Catalogue.
 
 ```markdown
-![Pokemon Catalogue](docs/screenshots/pokemon-catalogue.png)
+<img width="1165" height="1600" alt="screen" src="https://github.com/user-attachments/assets/7775a70d-ce86-4a7f-baf3-08e3634996ed" />
+
 ```
 
 ## Pokémon Detail
@@ -969,7 +972,8 @@ docs/
 > Tambahkan screenshot detail Pokémon.
 
 ```markdown
-![Pokemon Detail](docs/screenshots/pokemon-detail.png)
+<img width="1246" height="1600" alt="screen" src="https://github.com/user-attachments/assets/f31fa058-c868-4fe4-84fd-2a2c420d3143" />
+
 ```
 
 ## My Rental
@@ -977,7 +981,8 @@ docs/
 > Tambahkan screenshot My Rental.
 
 ```markdown
-![My Rental](docs/screenshots/my-rental.png)
+<img width="1264" height="1600" alt="screen" src="https://github.com/user-attachments/assets/09d53c1e-8b6b-476b-b8d3-eb885d4da1c6" />
+
 ```
 
 ## Admin Dashboard
@@ -985,7 +990,8 @@ docs/
 > Tambahkan screenshot Admin Dashboard.
 
 ```markdown
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+<img width="1855" height="917" alt="image" src="https://github.com/user-attachments/assets/34da7a06-5ef0-4768-bc4e-2567e1338972" />
+
 ```
 
 ---

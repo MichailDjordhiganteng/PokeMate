@@ -52,6 +52,14 @@ class RentalController extends Controller
         ]);
     }
 
+    public function show(Rental $rental)
+    {
+        return view('rentals.show', [
+            'rental' => $rental->load('trainer.trainerProfile', 'rentalDetails.pokemon.types', 'processedByAdmin'),
+            'adminView' => true,
+        ]);
+    }
+
     public function complete(Request $request, Rental $rental, RentalService $service)
     {
         $data = $request->validate(['condition' => ['required', Rule::in(['available', 'resting', 'unavailable'])]]);

@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('trainers', Admin\TrainerController::class)->only(['index', 'update', 'destroy']);
         Route::resource('admins', Admin\AdminAccountController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::get('/rentals', [Admin\RentalController::class, 'index'])->name('rentals.index');
+        Route::get('/rentals/{rental}', [Admin\RentalController::class, 'show'])->name('rentals.show');
         Route::get('/returns', [Admin\RentalController::class, 'index'])->name('returns.index');
         Route::post('/returns/{rental}', [Admin\RentalController::class, 'complete'])->name('returns.complete');
         Route::get('/reports', [Admin\RentalController::class, 'report'])->name('reports.index');

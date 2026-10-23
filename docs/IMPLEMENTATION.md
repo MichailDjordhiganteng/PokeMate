@@ -11,7 +11,7 @@ Repository awal berisi autentikasi, model/migrasi/seeder, CRUD Pokémon, serta d
 | Kelola tipe | `/admin/types` |
 | Kelola trainer | `/admin/trainers` |
 | Kelola akun admin (checklist PDF) | `/admin/admins` |
-| Monitoring rental | `/admin/rentals` |
+| Monitoring dan detail rental admin | `/admin/rentals`, `/admin/rentals/{rental}` |
 | Pengembalian partner admin | `/admin/returns` |
 | Laporan rental | `/admin/reports`, `/admin/reports/export`, `/admin/reports/print` |
 | Katalog Pokédex | `/trainer/catalog` |

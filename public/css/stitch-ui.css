@@ -166,6 +166,8 @@ td small { font-size: 10px; }
 .cell-user small { display: block; }
 .cell-code { font-size: 10px; font-weight: 700; color: var(--blue); background: #edf2ff; padding: 3px 5px; border-radius: 4px; }
 .cell-actions { display: flex; align-items: center; gap: 5px; }.cell-actions form { margin: 0; }
+.rental-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.rental-actions .button { white-space: nowrap; }
 .cell-money { white-space: nowrap; font-weight: 700; }.cell-money small { font-weight: 400; }
 .badge { font-size: 10px; line-height: 1.4; padding: 4px 9px; }
 .status-badge { display: inline-flex; align-items: center; gap: 5px; font-weight: 700; }

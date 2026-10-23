@@ -16,7 +16,7 @@
 | Dashboard admin | Hero operasional, 8 KPI, donut distribusi status, grafik rental/pengembalian 7 hari, pintasan, tabel transaksi terbaru. Statistik diambil dari database. |
 | Inventaris Pokémon | KPI inventaris, filter tipe/status/urutan, thumbnail partner, badge elemen berwarna, status, tombol edit/hapus, form tipe berbentuk pilihan chip. |
 | Tipe/trainer/admin | Tabel dengan ikon/identitas, statistik yang relevan, pencarian, modal tambah/edit, dan konfirmasi hapus yang sudah ada. |
-| Monitoring/pengembalian | Ringkasan operasional, indikator keterlambatan, filter transaksi, daftar partner, blok pemeriksaan pengembalian dan kondisi partner. |
+| Monitoring/pengembalian | Ringkasan operasional, indikator keterlambatan, filter transaksi, daftar partner, detail khusus admin melalui `/admin/rentals/{rental}`, blok pemeriksaan pengembalian dan kondisi partner. |
 | Laporan | Filter dokumen, 5 KPI, masthead dokumen, tabel transaksi, ekspor dan cetak seluruh hasil filter. |
 | Login/register | Layout dua kolom, ilustrasi dari mockup yang disimpan lokal, panel informasi, input berikon, toggle password, akun demo pada lingkungan lokal, opsi remember-me. |
 | Navigasi trainer | Navbar dengan menu aktif, jumlah slot, avatar dan dropdown profil; menu lipat pada HP. |
@@ -45,6 +45,13 @@
 - Halaman tamu/admin/trainer diperiksa pada viewport **1440 × 1000** dan **390 × 1000**.
 - Login, akses peran, menu mobile, modal tipe, validasi modal, durasi 5 hari, dan alur form → konfirmasi diuji di browser.
 - Audit akhir tidak menemukan error JavaScript atau overflow horizontal dokumen.
-- PHPUnit: **20 tes lulus, 243 assertions**, termasuk filter tipe/status dan urutan berdasarkan nilai database.
+- PHPUnit: **24 tes lulus, 327 assertions**, termasuk filter tipe/status, urutan berdasarkan nilai database, tautan detail rental per peran, dan proteksi kepemilikan trainer.
 - Blade cache, Laravel Pint, dan `git diff --check` berhasil.
 - Rumus rental/denda, pembatasan peran, dan proteksi riwayat tetap berlaku. Tidak diperlukan migrasi tambahan untuk perubahan UI ini.
+
+## Perbaikan akses detail rental
+
+- Directive Blade pada kolom aksi dipisahkan per baris untuk mencegah `@endif@else` terbaca sebagai teks literal.
+- Tombol detail admin mengarah ke route admin, sedangkan trainer memakai route trainer dan tetap dibatasi pada rental miliknya.
+- Halaman detail bersama menampilkan trainer pemilik rental dan tarif historis dari detail transaksi, bukan akun yang sedang melihat atau tarif katalog terbaru.
+- Tes mencakup seluruh status rental dan penolakan akses lintas peran/kepemilikan. Pemeriksaan browser mengeklik empat tautan detail admin yang ada dan semuanya mengembalikan HTTP 200, serta memeriksa tampilan mobile dan detail trainer.

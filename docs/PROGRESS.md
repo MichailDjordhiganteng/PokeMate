@@ -60,7 +60,7 @@ Acuan: **Progress PokePartner - Google Spreadsheet.pdf**, 6 halaman. Halaman 1â€
 
 ## Perintah pengecekan
 
-Hasil pengujian otomatis setelah penyesuaian UI Stitch: **20 tes lulus, 243 assertions**. Laravel Pint juga dijalankan untuk merapikan format PHP. Audit browser mencakup halaman tamu, admin, dan trainer pada desktop/mobile, modal edit, validasi, menu responsif, pilihan durasi, serta alur ke halaman konfirmasi tanpa membuat rental baru.
+Hasil pengujian otomatis setelah penyesuaian UI Stitch dan perbaikan detail rental: **24 tes lulus, 327 assertions**. Laravel Pint juga dijalankan untuk merapikan format PHP. Audit browser mencakup halaman tamu, admin, dan trainer pada desktop/mobile, modal edit, validasi, menu responsif, pilihan durasi, alur ke halaman konfirmasi, serta tombol detail admin/trainer tanpa mengubah transaksi pengguna.
 
 ```bash
 php artisan test

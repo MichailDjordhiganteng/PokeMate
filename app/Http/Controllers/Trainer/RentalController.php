@@ -88,7 +88,10 @@ class RentalController extends Controller
     {
         abort_unless($rental->trainer_id === $request->user()->id, 403);
 
-        return view('trainer.rentals.show', ['rental' => $rental->load('rentalDetails.pokemon.types', 'processedByAdmin')]);
+        return view('rentals.show', [
+            'rental' => $rental->load('trainer.trainerProfile', 'rentalDetails.pokemon.types', 'processedByAdmin'),
+            'adminView' => false,
+        ]);
     }
 
     public function returnForm(Request $request, Rental $rental)

@@ -20,6 +20,8 @@ class Rental extends Model
         'return_requested_at',
         'returned_at',
         'processed_by_admin_id',
+        'destination',
+        'notes',
     ];
 
     protected function casts(): array

@@ -1,0 +1,74 @@
+header {
+    background: var(--navy);
+    color: white;
+    border: 0;
+}
+header .brand span { color: var(--yellow); }
+header nav { gap: 6px; }
+header nav > a { padding: 8px 10px; border-radius: 8px; }
+header nav > a:hover { background: #ffffff18; text-decoration: none; }
+header nav > a[aria-current="page"] { background: var(--yellow); color: var(--navy); }
+.hero { background: linear-gradient(115deg, #142850, #253e7e); }
+.hero::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border: 22px solid #ffffff08;
+    border-radius: 50%;
+    right: -55px;
+    bottom: -100px;
+    pointer-events: none;
+}
+.trainer-hero { display: grid; grid-template-columns: 1fr 250px; align-items: center; gap: 36px; }
+.trainer-license { background: #ffffff12; padding: 24px; border-radius: 14px; position: relative; z-index: 1; }
+.trainer-license strong { display: block; margin: 14px 0; }
+.trainer-license p { font-size: 13px; overflow-wrap: anywhere; }
+.trainer-license a { font-size: 12px; font-weight: 700; color: var(--yellow); }
+.trainer-avatar { width: 64px; height: 64px; object-fit: cover; border-radius: 50%; display: block; margin-top: 16px; }
+.adventure-stats .panel { border-left: 3px solid #ca9900; }
+.adventure-stats .panel:nth-child(2) { border-left-color: #165acb; }
+.adventure-stats .panel:nth-child(3) { border-left-color: #087c58; }
+.adventure-stats strong { display: block; font-size: 28px; line-height: 1.35; margin: 18px 0 12px; }
+.adventure-stats strong small { font-size: 13px; font-weight: 500; }
+progress { width: 100%; height: 8px; accent-color: var(--yellow); }
+.team-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.team-card { display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
+.team-card > .row { border-top: 1px solid var(--line); padding-top: 18px; }
+.team-partner { display: grid; grid-template-columns: 130px 1fr; gap: 20px; align-items: center; }
+.team-partner .art { margin: 0; height: 160px; }
+.team-partner .art img { height: 120px; }
+.team-partner p { font-size: 13px; }
+.open-slot { text-align: center; padding: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.slot-icon { display: grid; place-items: center; background: #fff3bf; color: #836400; width: 58px; height: 58px; border-radius: 50%; font-size: 30px; margin-bottom: 12px; }
+.dashboard-partners .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.dashboard-partners .card { padding: 16px; }
+.dashboard-partners .price { font-size: 17px; }
+.dashboard-partners .card h2 { font-size: 20px; }
+.partner-actions { margin-top: 18px; gap: 8px; }
+.partner-actions > a { flex: 1; }
+.type-grass, .type-bug { background: linear-gradient(135deg, #d9f9dc, #b8f2d6); }
+.type-fire { background: linear-gradient(135deg, #fff0dc, #ffd3b0); }
+.type-water, .type-ice { background: linear-gradient(135deg, #def7ff, #b7e1f9); }
+.type-electric { background: linear-gradient(135deg, #fff8d1, #fff09d); }
+.type-psychic, .type-fairy { background: linear-gradient(135deg, #ffe7f6, #e8d9fd); }
+.type-ghost, .type-poison { background: linear-gradient(135deg, #efe5ff, #d7d3f6); }
+.expedition-tip { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 36px; padding: 30px; }
+.expedition-tip p { margin-bottom: 0; font-size: 13px; }
+.expedition-tip .button { flex-shrink: 0; }
+@media (max-width: 1100px) {
+    .dashboard-partners .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .trainer-hero { grid-template-columns: 1fr 220px; padding: 32px; }
+}
+@media (max-width: 750px) {
+    .trainer-hero { grid-template-columns: 1fr; }
+    .trainer-license { display: none; }
+    .adventure-stats, .team-grid { grid-template-columns: 1fr; }
+    .expedition-tip { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 420px) {
+    .dashboard-partners .grid { grid-template-columns: 1fr; }
+    .team-partner { grid-template-columns: 95px 1fr; gap: 12px; }
+    .team-partner .art { height: 130px; }
+    .team-partner .art img { height: 95px; }
+}

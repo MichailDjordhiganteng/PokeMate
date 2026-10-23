@@ -1,87 +1,54 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Admin\PokemonController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Trainer;
+use App\Http\Middleware\EnsureRole;
+use Illuminate\Support\Facades\Route;
 
-// Halaman awal
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', fn () => view('landing'))->name('home');
 
-// Halaman untuk pengunjung yang belum login
 Route::middleware('guest')->group(function () {
-
-    // Login
-    Route::get('/login', [LoginController::class, 'showLogin'])
-        ->name('login');
-
-    Route::post('/login', [LoginController::class, 'login'])
-        ->middleware('throttle:6,1')
-        ->name('login.process');
-
-    // Register Trainer
-    Route::get('/register', [RegisterController::class, 'showRegister'])
-        ->name('register');
-
-    Route::post('/register', [RegisterController::class, 'register'])
-        ->middleware('throttle:6,1')
-        ->name('register.process');
+    Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:6,1')->name('login.process');
+    Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:6,1')->name('register.process');
 });
 
-// Halaman untuk pengguna yang sudah login
 Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // =====================================
-    // DASHBOARD ADMIN
-    // =====================================
-    Route::get('/admin/dashboard', function () {
-        abort_unless(auth()->user()->role === 'admin', 403);
+    Route::prefix('admin')->name('admin.')->middleware(EnsureRole::class.':admin')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+        Route::resource('pokemons', Admin\PokemonController::class)->except('show');
+        Route::resource('types', Admin\TypeController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('trainers', Admin\TrainerController::class)->only(['index', 'update', 'destroy']);
+        Route::resource('admins', Admin\AdminAccountController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::get('/rentals', [Admin\RentalController::class, 'index'])->name('rentals.index');
+        Route::get('/rentals/{rental}', [Admin\RentalController::class, 'show'])->name('rentals.show');
+        Route::get('/returns', [Admin\RentalController::class, 'index'])->name('returns.index');
+        Route::post('/returns/{rental}', [Admin\RentalController::class, 'complete'])->name('returns.complete');
+        Route::get('/reports', [Admin\RentalController::class, 'report'])->name('reports.index');
+        Route::get('/reports/export', [Admin\RentalController::class, 'export'])->name('reports.export');
+        Route::get('/reports/print', [Admin\RentalController::class, 'printReport'])->name('reports.print');
+    });
 
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-
-    // =====================================
-    // KELOLA POKÉMON - KHUSUS ADMIN
-    // =====================================
-
-    // READ - Menampilkan daftar dan pencarian Pokémon
-    Route::get('/admin/pokemons', [PokemonController::class, 'index'])
-        ->name('admin.pokemons.index');
-
-    // CREATE - Menampilkan form tambah Pokémon
-    Route::get('/admin/pokemons/create', [PokemonController::class, 'create'])
-        ->name('admin.pokemons.create');
-
-    // STORE - Menyimpan Pokémon baru
-    Route::post('/admin/pokemons', [PokemonController::class, 'store'])
-        ->name('admin.pokemons.store');
-
-    // EDIT - Menampilkan form edit Pokémon
-    Route::get('/admin/pokemons/{pokemon}/edit', [PokemonController::class, 'edit'])
-        ->name('admin.pokemons.edit');
-
-    // UPDATE - Menyimpan perubahan Pokémon
-    Route::put('/admin/pokemons/{pokemon}', [PokemonController::class, 'update'])
-        ->name('admin.pokemons.update');
-
-    // DELETE - Menghapus Pokémon
-    Route::delete('/admin/pokemons/{pokemon}', [PokemonController::class, 'destroy'])
-        ->name('admin.pokemons.destroy');
-
-    // =====================================
-    // DASHBOARD TRAINER
-    // =====================================
-    Route::get('/trainer/dashboard', function () {
-        abort_unless(auth()->user()->role === 'trainer', 403);
-
-        return view('trainer.dashboard');
-    })->name('trainer.dashboard');
-
-    // =====================================
-    // LOGOUT
-    // =====================================
-    Route::post('/logout', [LoginController::class, 'logout'])
-        ->name('logout');
+    Route::prefix('trainer')->name('trainer.')->middleware(EnsureRole::class.':trainer')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'trainer'])->name('dashboard');
+        Route::get('/catalog', [Trainer\CatalogController::class, 'index'])->name('catalog.index');
+        Route::get('/catalog/{pokemon}', [Trainer\CatalogController::class, 'show'])->name('catalog.show');
+        Route::get('/adventure-match', [Trainer\CatalogController::class, 'match'])->name('match');
+        Route::get('/profile', [Trainer\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [Trainer\ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/rentals', [Trainer\RentalController::class, 'index'])->name('rentals.index');
+        Route::get('/rentals/history', [Trainer\RentalController::class, 'index'])->name('rentals.history');
+        Route::get('/rentals/create/{pokemon}', [Trainer\RentalController::class, 'create'])->name('rentals.create');
+        Route::post('/rentals/confirm', [Trainer\RentalController::class, 'confirm'])->name('rentals.confirm');
+        Route::post('/rentals', [Trainer\RentalController::class, 'store'])->name('rentals.store');
+        Route::get('/rentals/{rental}', [Trainer\RentalController::class, 'show'])->name('rentals.show');
+        Route::get('/rentals/{rental}/return', [Trainer\RentalController::class, 'returnForm'])->name('rentals.return');
+        Route::post('/rentals/{rental}/return', [Trainer\RentalController::class, 'requestReturn'])->name('rentals.request-return');
+    });
 });

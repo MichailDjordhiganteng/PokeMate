@@ -48,15 +48,15 @@ Acuan: **Progress PokePartner - Google Spreadsheet.pdf**, 6 halaman. Halaman 1â€
 | 35 | Integrasi UI sesuai mockup | Belum | Layout dan halaman disesuaikan dengan HTML ekspor Stitch: sidebar admin, dashboard/grafik, tabel, modal, autentikasi dua kolom, katalog, pilihan medan, checkout, tiket, pengembalian, dan profil. Audit browser desktop 1440px/mobile 390px lulus tanpa overflow halaman/error JS. Lihat `docs/UI.md`. |
 | 36 | Pengujian validasi, role, alur rental | Belum | Feature tests mencakup skenario positif/negatif, kepemilikan, kuota, stok, denda, pengguna, gambar, dan laporan. |
 | 37 | Dokumentasi & README | Belum | README instalasi, konfigurasi MySQL, akun demo, aturan, pengujian, cetak laporan; dokumen pemetaan dan progres tersedia. |
-| 38 | Cek Git status, branch, remote | Belum | Sudah diperiksa. Branch `main` melacak `origin/main`; remote `https://github.com/MichailDjordhiganteng/PokeMate.git`. Perubahan implementasi masih lokal. |
-| 39 | Commit & push branch aman | Belum | Belum dijalankan; menunggu instruksi eksplisit commit/push. `.env` dan database lokal diabaikan Git. |
+| 38 | Cek Git status, branch, remote | Belum | Sudah diperiksa. Remote `https://github.com/MichailDjordhiganteng/PokeMate.git`. Pengembangan dilanjutkan pada branch `feature/pokepartner-rental-stitch-ui`, terpisah dari `main`. |
+| 39 | Commit & push branch aman | Belum | Commit dibuat atas instruksi pengguna pada branch `feature/pokepartner-rental-stitch-ui`; pengiriman ditujukan hanya ke branch tersebut tanpa merge ke `main`. `.env`, database lokal, dan file pengujian sementara diabaikan Git. |
 
 ## Verifikasi yang masih membutuhkan lingkungan tambahan
 
 - Tes otomatis dijalankan pada SQLite in-memory; koneksi dan perilaku concurrency MySQL belum diuji pada sesi ini.
 - Cetak telah diuji dari hasil HTML/server, termasuk seluruh baris dan filter. Dialog cetak dan pagination fisik kertas masih memerlukan pengujian dengan printer atau penyimpanan PDF pengguna. Tampilan halaman aplikasi sudah diperiksa melalui browser desktop/mobile.
 - Mockup menyebut jam/toleransi pada beberapa contoh; PDF tidak menetapkan rumus detail. Implementasi saat ini memakai hari kalender sebagaimana README.
-- Tidak ada commit/push otomatis dari checklist dokumen.
+- Commit/push dikerjakan atas instruksi eksplisit pengguna, bukan berdasarkan checklist dokumen saja.
 
 ## Perintah pengecekan
 

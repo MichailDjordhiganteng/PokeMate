@@ -36,4 +36,4 @@ Checklist pengguna telah diterima dalam bentuk `Progress PokePartner - Google Sp
 - Penyewaan dimulai sebagai `active` dan langsung menahan partner; tidak ada alur pembayaran atau persetujuan awal admin.
 - Ekspor berupa CSV kompatibel Excel, bukan workbook XLSX.
 - Cetak memakai halaman khusus berisi seluruh transaksi yang sesuai filter dan stylesheet A4 landscape; PDF dapat disimpan melalui dialog cetak browser.
-- Git sudah diperiksa: branch `main` melacak `origin/main`; remote mengarah ke repository PokeMate. Perubahan masih lokal, belum di-commit/push.
+- Git sudah diperiksa; remote mengarah ke repository PokeMate. Pengembangan disimpan pada branch `feature/pokepartner-rental-stitch-ui`, terpisah dari `main`. Riwayat `origin/main` terbaru diikutkan ke branch fitur sebelum pengiriman; `main` tidak menjadi target push.

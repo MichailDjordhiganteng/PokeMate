@@ -86,6 +86,10 @@ php artisan view:cache
 php artisan route:list
 ```
 
-Tes memakai SQLite in-memory dan memeriksa alur rental/pengembalian, perhitungan biaya/denda, kuota termasuk status `late`/`return_requested`, akses peran/kepemilikan, filter rekomendasi, perlindungan master data, upload/ganti/hapus gambar, kode duplikat, pencarian, pengelolaan admin, cetak seluruh hasil filter, serta render halaman utama. Pengujian khusus MySQL dan pemeriksaan visual browser belum dilakukan pada sesi ini.
+Tes memakai SQLite in-memory dan memeriksa alur rental/pengembalian, perhitungan biaya/denda, kuota termasuk status `late`/`return_requested`, akses peran/kepemilikan, filter rekomendasi, perlindungan master data, upload/ganti/hapus gambar, kode duplikat, pencarian, pengelolaan admin, cetak seluruh hasil filter, serta render halaman utama. Migrasi dan seeding MySQL XAMPP serta tampilan browser desktop/mobile telah diverifikasi. Pengujian concurrency khusus MySQL belum dilakukan.
+
+## Branch pengembangan
+
+Perubahan fitur dan UI disimpan pada branch `feature/pokepartner-rental-stitch-ui`. Pengiriman perubahan ditujukan ke branch ini; penggabungan ke `main` dilakukan terpisah setelah review.
 
 Lihat `docs/IMPLEMENTATION.md` untuk pemetaan mockup dan `docs/PROGRESS.md` untuk status setiap butir PDF beserta bukti implementasi/pengujian.

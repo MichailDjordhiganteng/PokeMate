@@ -1,59 +1,91 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PokeMate / PokePartner
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi rental Pokémon berbasis Laravel 12 (PHP 8.2+). Dua peran: **admin** dan **trainer**. Tampilan menggunakan layout responsif dengan warna navy, kuning, dan mint dari mockup PokePartner.
 
-## About Laravel
+UI telah disesuaikan dengan ekspor Stitch: sidebar admin, dashboard statistik/grafik, tabel dan modal operasional, login/register dua kolom, katalog berwarna berdasarkan tipe, kartu Adventure Match, checkout, tiket rental, dan profil trainer. Rincian acuan, komponen, dan verifikasi ada di `docs/UI.md`. Perubahan UI tidak memerlukan migrasi database tambahan.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Menjalankan secara lokal
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+php artisan serve
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Pada Windows gunakan `copy .env.example .env` untuk menggantikan `cp`. Jika memakai WSL dengan PHP XAMPP yang tersedia di PATH, gunakan `php.exe` sebagai pengganti `php`. Default menggunakan SQLite; buat file kosong `database/database.sqlite` jika Laravel menanyakannya. Buka `http://127.0.0.1:8000`. Halaman aplikasi memakai CSS langsung di `public/css/`, sehingga tidak memerlukan proses build Node untuk dijalankan.
 
-## Learning Laravel
+Untuk MySQL, ubah `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD` di `.env` sebelum menjalankan migrasi. Untuk proyek dengan database yang sudah ada, jalankan `php artisan migrate` tanpa menghapus tabel.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Contoh konfigurasi MySQL lokal setelah membuat database `pokepartner`:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pokepartner
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Laravel Sponsors
+### Akun demo setelah seeding
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Peran | Email | Password |
+| --- | --- | --- |
+| Admin | admin@gmail.com | password |
+| Trainer | trainer@gmail.com | password |
 
-### Premium Partners
+## Fitur
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Landing page, registrasi trainer beserta profil, login, logout, pembatasan akses per peran.
+- Dashboard dinamis admin dan trainer.
+- Admin: CRUD Pokémon termasuk upload gambar dan relasi tipe; kelola tipe, trainer, dan akun admin; monitoring rental; pemeriksaan pengembalian; laporan dengan filter, cetak/simpan PDF, serta ekspor CSV yang dapat dibuka di Excel.
+- Trainer: katalog dan filter tipe/status, detail Pokémon, Adventure Match berdasarkan medan/anggaran, formulir sewa dengan kalkulator biaya, konfirmasi, bukti rental, rental aktif, riwayat, pengajuan pengembalian, serta edit profil/password.
 
-## Contributing
+## Aturan rental
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Maksimal 2 partner dalam rental yang belum selesai per trainer; durasi 1–5 hari.
+- Partner harus berstatus `available`. Harga dihitung server dari tarif database, bukan harga dari browser.
+- Partner langsung menjadi `on_adventure` saat rental berhasil, termasuk untuk tanggal mulai mendatang.
+- Pengembalian hanya bisa diajukan pemilik rental setelah tanggal mulai. Partner tetap tidak tersedia sampai admin menyelesaikan pemeriksaan.
+- Admin menentukan kondisi partner: tersedia, istirahat, atau tidak tersedia.
+- Denda sementara: Rp 100.000 per hari kalender setelah tanggal jatuh tempo hingga tanggal pengajuan pengembalian. Waktu tunggu pemrosesan admin tidak menambah denda.
+- Transaksi dan row locking melindungi ketersediaan serta kuota pada database yang mendukungnya (MySQL/PostgreSQL).
+- Tipe yang masih digunakan dan trainer/Pokémon dengan riwayat rental tidak dapat dihapus.
+- Admin tidak dapat menghapus akun yang sedang digunakan atau akun admin dengan riwayat pemrosesan rental.
 
-## Code of Conduct
+Checklist telah dicocokkan dengan `Progress PokePartner - Google Spreadsheet.pdf` yang diberikan pengguna. Batas slot/durasi sesuai PDF; nominal denda mengikuti mockup. Denda saat ini dihitung per hari kalender, bukan toleransi per jam. Profil mendukung upload avatar. Gambar Pokémon demo memakai artwork PokeAPI dan memerlukan internet; gambar upload disajikan dari storage lokal.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Cetak laporan dan kelola admin
 
-## Security Vulnerabilities
+- Buka **Laporan**, terapkan filter, lalu pilih **Cetak / Simpan PDF**. Halaman cetak memuat seluruh transaksi sesuai filter, termasuk yang berada di luar halaman pertama. Gunakan dialog cetak browser untuk memilih printer atau menyimpan PDF.
+- Buka menu **Admin** untuk menambah, mencari, mengedit, atau menghapus akun admin. Password baru bersifat opsional saat edit. Mengganti password akun sendiri memerlukan password saat ini.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Pengujian
 
-## License
+### Notifikasi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Notifikasi tampil sebagai kartu di kanan atas dengan progress bar, watermark, dan ikon Poké Ball lokal:
+
+| Flash session | Judul | Ikon | Durasi |
+| --- | --- | --- | --- |
+| `success` | Berhasil! | Friend Ball (hijau, titik merah/kuning) | 6,5 detik |
+| `error` | Gagal! | Poké Ball (merah/putih) | 10 detik |
+| `warning` | Perhatian! | Ultra Ball (hitam/kuning) | 10 detik |
+| `info` | Informasi | Great Ball (biru/pink/putih) | 8 detik |
+
+Gunakan `redirect()->back()->with('success', 'Pesan notifikasi')` atau jenis lainnya. Hitung mundur berhenti saat hover/fokus, tab tidak aktif, atau modal konfirmasi terbuka. Pesan validasi tidak ditutup otomatis. Semua notifikasi dapat ditutup melalui tombol ×. Ikon SVG berada di `public/images/pokeballs` dan tidak membutuhkan koneksi internet.
+
+### Perintah tes
+
+```bash
+php artisan test
+php artisan view:cache
+php artisan route:list
+```
+
+Tes memakai SQLite in-memory dan memeriksa alur rental/pengembalian, perhitungan biaya/denda, kuota termasuk status `late`/`return_requested`, akses peran/kepemilikan, filter rekomendasi, perlindungan master data, upload/ganti/hapus gambar, kode duplikat, pencarian, pengelolaan admin, cetak seluruh hasil filter, serta render halaman utama. Pengujian khusus MySQL dan pemeriksaan visual browser belum dilakukan pada sesi ini.
+
+Lihat `docs/IMPLEMENTATION.md` untuk pemetaan mockup dan `docs/PROGRESS.md` untuk status setiap butir PDF beserta bukti implementasi/pengujian.

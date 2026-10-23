@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class PokemonController extends Controller
 {
@@ -16,6 +17,13 @@ class PokemonController extends Controller
     public function index(Request $request)
     {
         abort_unless(auth()->user()->role === 'admin', 403);
+
+        $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'type_id' => ['nullable', 'integer', 'exists:types,id'],
+            'status' => ['nullable', Rule::in(['available', 'on_adventure', 'resting', 'unavailable'])],
+            'sort' => ['nullable', Rule::in(['code', 'level', 'price_low', 'price_high'])],
+        ]);
 
         $query = Pokemon::with('types');
 
@@ -25,17 +33,24 @@ class PokemonController extends Controller
 
             $query->where(function ($q) use ($search) {
                 $q->where('pokemon_name', 'like', "%{$search}%")
-                  ->orWhere('pokemon_code', 'like', "%{$search}%");
+                    ->orWhere('pokemon_code', 'like', "%{$search}%");
             });
         }
 
-        // Urutkan berdasarkan kode Pokémon
+        $query->when($request->filled('type_id'), fn ($q) => $q->whereHas('types', fn ($q) => $q->where('types.id', $request->type_id)))
+            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->status));
+        $sort = $request->input('sort', 'code');
         $pokemons = $query
-            ->orderBy('pokemon_code', 'asc')
+            ->orderBy(match ($sort) {
+                'level' => 'pokemon_level', 'price_low', 'price_high' => 'rental_price', default => 'pokemon_code'
+            }, in_array($sort, ['level', 'price_high']) ? 'desc' : 'asc')
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.pokemons.index', compact('pokemons'));
+        return view('admin.pokemons.index', [
+            'pokemons' => $pokemons, 'types' => Type::orderBy('type')->get(),
+            'inventory' => Pokemon::selectRaw('status, COUNT(*) as total')->groupBy('status')->pluck('total', 'status'),
+        ]);
     }
 
     // CREATE - Menampilkan formulir tambah Pokémon
@@ -244,6 +259,11 @@ class PokemonController extends Controller
                 $validated,
                 $newImage
             ) {
+                $pokemon = Pokemon::whereKey($pokemon->id)->lockForUpdate()->firstOrFail();
+                if ($pokemon->status === 'on_adventure') {
+                    throw ValidationException::withMessages(['status' => 'Pokémon sedang disewa dan tidak dapat diedit.']);
+                }
+
                 $data = [
                     'pokemon_code' => $validated['pokemon_code'],
                     'pokemon_name' => $validated['pokemon_name'],
@@ -311,6 +331,11 @@ class PokemonController extends Controller
         $imagePath = $pokemon->pokemon_image;
 
         DB::transaction(function () use ($pokemon) {
+            $pokemon = Pokemon::whereKey($pokemon->id)->lockForUpdate()->firstOrFail();
+            if ($pokemon->status === 'on_adventure' || $pokemon->rentalDetails()->exists()) {
+                throw ValidationException::withMessages(['pokemon' => 'Pokémon sedang disewa atau memiliki riwayat rental.']);
+            }
+
             // Hapus hubungan Pokémon dengan tipe
             $pokemon->types()->detach();
 

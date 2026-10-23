@@ -42,4 +42,18 @@ class Pokemon extends Model
     {
         return $this->hasMany(RentalDetail::class);
     }
+
+    public function imageUrl(): ?string
+    {
+        if ($this->pokemon_image) {
+            return asset('storage/'.$this->pokemon_image);
+        }
+
+        $number = [
+            'pikachu' => 25, 'bulbasaur' => 1, 'charmander' => 4, 'squirtle' => 7,
+            'rowlet' => 722, 'gardevoir' => 282, 'lucario' => 448, 'gengar' => 94,
+        ][strtolower($this->pokemon_name)] ?? null;
+
+        return $number ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'.$number.'.png' : null;
+    }
 }

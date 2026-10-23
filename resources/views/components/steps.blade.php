@@ -1,0 +1,2 @@
+@props(['active' => 1, 'labels' => ['Pilih Partner', 'Rencana Sewa', 'Konfirmasi']])
+<ol class="checkout-steps" aria-label="Tahapan transaksi">@foreach($labels as $label)<li class="{{ $loop->iteration <= $active ? 'step-active' : '' }}" @if($loop->iteration === $active) aria-current="step" @endif><span>{{ $loop->iteration < $active ? '✓' : $loop->iteration }}</span><div><small>Langkah {{ $loop->iteration }}</small><strong>{{ $label }}</strong></div></li>@endforeach</ol>

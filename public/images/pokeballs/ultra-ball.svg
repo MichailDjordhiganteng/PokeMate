@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs><clipPath id="ball"><circle cx="50" cy="50" r="45"/></clipPath><linearGradient id="black" x2="0" y2="1"><stop stop-color="#46505c"/><stop offset="1" stop-color="#222832"/></linearGradient></defs>
+  <g clip-path="url(#ball)">
+    <path fill="#fff" d="M0 0h100v100H0z"/>
+    <path fill="url(#black)" d="M0 0h100v50H0z"/>
+    <path d="M12 13 28 5l7 40H15Zm76 0L72 5l-7 40h20Z" fill="#f9d54a" stroke="#d5a523" stroke-width="1.5"/>
+    <path d="M25 10q25-13 50 0" fill="none" stroke="#f9d54a" stroke-width="6"/>
+    <path fill="#e9edf3" d="M9 68a45 45 0 0 0 82 0c-21 20-61 20-82 0"/>
+    <path fill="#263344" d="M0 45h100v10H0z"/>
+    <path d="m39 15 3 14" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".18"/>
+  </g>
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#263344" stroke-width="4"/>
+  <circle cx="50" cy="50" r="15" fill="#fff" stroke="#263344" stroke-width="5"/>
+  <circle cx="50" cy="50" r="8" fill="#edf1f6" stroke="#c7d0dc" stroke-width="1.5"/>
+</svg>

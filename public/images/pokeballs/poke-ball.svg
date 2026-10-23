@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs><clipPath id="ball"><circle cx="50" cy="50" r="45"/></clipPath><linearGradient id="red" x2="0" y2="1"><stop stop-color="#ff555c"/><stop offset="1" stop-color="#e91e33"/></linearGradient></defs>
+  <g clip-path="url(#ball)">
+    <path fill="#fff" d="M0 0h100v100H0z"/>
+    <path fill="url(#red)" d="M0 0h100v50H0z"/>
+    <path fill="#e9edf3" d="M9 68a45 45 0 0 0 82 0c-21 20-61 20-82 0"/>
+    <path fill="#263344" d="M0 45h100v10H0z"/>
+    <ellipse cx="31" cy="22" rx="15" ry="7" fill="#fff" opacity=".23" transform="rotate(-30 31 22)"/>
+  </g>
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#263344" stroke-width="4"/>
+  <circle cx="50" cy="50" r="15" fill="#fff" stroke="#263344" stroke-width="5"/>
+  <circle cx="50" cy="50" r="8" fill="#edf1f6" stroke="#c7d0dc" stroke-width="1.5"/>
+</svg>

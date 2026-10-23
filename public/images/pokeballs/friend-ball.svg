@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs><clipPath id="ball"><circle cx="50" cy="50" r="45"/></clipPath><linearGradient id="green" x2="0" y2="1"><stop stop-color="#54cc73"/><stop offset="1" stop-color="#22a854"/></linearGradient></defs>
+  <g clip-path="url(#ball)">
+    <path fill="#fff" d="M0 0h100v100H0z"/>
+    <path fill="url(#green)" d="M0 0h100v50H0z"/>
+    <ellipse cx="50" cy="23" rx="5" ry="7" fill="#ffdc53"/>
+    <g fill="#f15b54"><ellipse cx="30" cy="29" rx="4" ry="6" transform="rotate(-30 30 29)"/><ellipse cx="23" cy="39" rx="5" ry="3" transform="rotate(25 23 39)"/><ellipse cx="70" cy="29" rx="4" ry="6" transform="rotate(30 70 29)"/><ellipse cx="77" cy="39" rx="5" ry="3" transform="rotate(-25 77 39)"/></g>
+    <path fill="#e9edf3" d="M9 68a45 45 0 0 0 82 0c-21 20-61 20-82 0"/>
+    <path fill="#263344" d="M0 45h100v10H0z"/>
+    <path d="m32 15 5-3" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+  </g>
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#263344" stroke-width="4"/>
+  <circle cx="50" cy="50" r="15" fill="#fff" stroke="#263344" stroke-width="5"/>
+  <circle cx="50" cy="50" r="8" fill="#edf1f6" stroke="#c7d0dc" stroke-width="1.5"/>
+</svg>

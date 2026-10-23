@@ -1,0 +1,63 @@
+/* Shared brand treatment; use the supplied PNG rather than a CSS placeholder. */
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none !important; }
+.brand .brand-wordmark { color: inherit; }
+.brand .brand-copy { color: inherit; }
+.brand .brand-accent { color: var(--yellow); }
+.brand-icon { display: block; width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; transform-origin: center; transition: transform 380ms cubic-bezier(.2,.8,.3,1), filter 250ms ease; }
+.brand:focus-visible .brand-icon { transform: rotate(18deg) scale(1.08); filter: drop-shadow(0 0 7px #ffcb0540); }
+
+/* Small, consistent movement gives controls feedback without shifting layout. */
+header nav > a { position: relative; transition: color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+header nav > a::after { content: ''; position: absolute; height: 2px; left: 12px; right: 12px; bottom: 3px; background: var(--yellow); border-radius: 3px; transform: scaleX(0); transform-origin: center; transition: transform 200ms ease; pointer-events: none; }
+header nav > a[aria-current="page"]::after { background: var(--navy); }
+header nav > a:focus-visible::after { transform: scaleX(1); }
+.button, button:not(.feedback-close) { transition: transform 160ms ease, box-shadow 180ms ease, background-color 180ms ease, filter 180ms ease; }
+.button:active, button:not(.feedback-close):not(:disabled):active { transform: translateY(1px) scale(.97); }
+.button:focus-visible, button:not(.feedback-close):focus-visible { box-shadow: 0 0 0 5px #ffcb0528; }
+.has-ripple { position: relative; overflow: hidden; isolation: isolate; }
+.interaction-ripple { position: absolute; display: block; border-radius: 50%; background: currentColor; opacity: .14; transform: scale(0); pointer-events: none; animation: control-ripple 500ms ease-out forwards; }
+.feedback-close { transition: background-color 160ms ease, color 160ms ease; }
+input, select, textarea { transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease; }
+input:focus, select:focus, textarea:focus { border-color: #7ca8e8; box-shadow: 0 0 0 4px #4377bc0d; }
+
+/* Cursor spotlight is contained inside the surface, never over page controls. */
+.interactive-surface { position: relative; isolation: isolate; }
+.interactive-surface::before { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; background: radial-gradient(240px circle at var(--pointer-x, 50%) var(--pointer-y, 50%), #ffcb051b, transparent 75%); opacity: 0; pointer-events: none; transition: opacity 250ms ease; }
+.hero.interactive-surface::before { background: radial-gradient(340px circle at var(--pointer-x, 50%) var(--pointer-y, 50%), #ffffff12, transparent 75%); }
+.admin-hero.interactive-surface::before { background: radial-gradient(340px circle at var(--pointer-x, 50%) var(--pointer-y, 50%), #ffffff12, transparent 75%); }
+.sidebar-nav > a, .metric, .quick-link { transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease; }
+.card .pokemon-art > img { transition: transform 300ms ease; }
+.interactive-surface.is-pointer-inside::before { opacity: 1; }
+.card, .team-card, .open-slot, .stats > .panel, .adventure-stats > .panel { transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
+.card:focus-within, .team-card:focus-within, .open-slot:focus-within { border-color: #e3c555; box-shadow: 0 10px 28px #1428500c; }
+.card .art img, .team-card .art img { transition: transform 300ms cubic-bezier(.2,.8,.3,1); }
+@media (hover: hover) and (pointer: fine) {
+    .brand:hover .brand-icon { animation: pokeball-greeting 650ms ease-in-out; filter: drop-shadow(0 0 7px #ffcb0540); }
+    header nav > a:hover { transform: translateY(-2px); }
+    header nav > a:hover::after { transform: scaleX(1); }
+    .button:hover, button:not(.feedback-close):not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 5px 14px #14285016; }
+    .button:active, button:not(.feedback-close):not(:disabled):active { transform: translateY(1px) scale(.97); box-shadow: none; }
+    .card:hover, .team-card:hover, .open-slot:hover, .stats > .panel:hover, .adventure-stats > .panel:hover { transform: translateY(-4px); border-color: #d8e1ed; box-shadow: 0 12px 30px #1428500e; }
+    .card:hover .art img, .team-card:hover .art img { transform: translateY(-3px) scale(1.045); }
+    .card:hover .pokemon-art > img { transform: translateY(-3px) scale(1.045); }
+    .metric:hover, .quick-link:hover { transform: translateY(-3px); box-shadow: 0 10px 24px #1428500d; }
+}
+@keyframes pokeball-greeting {
+    0%, 100% { transform: rotate(0) scale(1); }
+    25% { transform: rotate(-18deg) scale(1.08); }
+    60% { transform: rotate(22deg) scale(1.08); }
+    82% { transform: rotate(-8deg) scale(1.03); }
+}
+@keyframes control-ripple { to { transform: scale(1); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+    .brand-icon, header nav > a, header nav > a::after, .button, button, input, select, textarea,
+    .interactive-surface::before, .card, .team-card, .open-slot, .stats > .panel,
+    .adventure-stats > .panel, .card .art img, .team-card .art img { transition: none !important; animation: none !important; }
+    .brand:hover .brand-icon, .brand:focus-visible .brand-icon, header nav > a:hover,
+    .button:hover, .button:active, button:not(.feedback-close):not(:disabled):hover,
+    button:not(.feedback-close):not(:disabled):active, .card:hover, .team-card:hover,
+    .open-slot:hover, .stats > .panel:hover, .adventure-stats > .panel:hover,
+    .card:hover .art img, .team-card:hover .art img { transform: none !important; }
+    .interactive-surface::before, .interaction-ripple { display: none; }
+    .sidebar-nav > a, .metric, .quick-link, .card .pokemon-art > img { transition: none !important; animation: none !important; transform: none !important; }
+}

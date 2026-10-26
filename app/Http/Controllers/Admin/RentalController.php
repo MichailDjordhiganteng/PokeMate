@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RentalCompletedMail;
 use App\Models\Rental;
 use App\Services\RentalService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class RentalController extends Controller
@@ -38,12 +41,14 @@ class RentalController extends Controller
     {
         $query = $this->query($request);
         $returns = $request->routeIs('admin.returns.index');
+
         if ($returns) {
             $query->where('rental_status', 'return_requested');
         }
 
         return view('admin.rentals', [
-            'rentals' => $query->latest()->paginate(15)->withQueryString(), 'returns' => $returns,
+            'rentals' => $query->latest()->paginate(15)->withQueryString(),
+            'returns' => $returns,
             'activeCount' => Rental::whereIn('rental_status', ['active', 'late'])->count(),
             'dueTodayCount' => Rental::whereIn('rental_status', RentalService::OPEN_STATUSES)->whereDate('due_date', today())->count(),
             'lateCount' => Rental::whereIn('rental_status', ['active', 'late'])->whereDate('due_date', '<', today())->count(),
@@ -62,10 +67,46 @@ class RentalController extends Controller
 
     public function complete(Request $request, Rental $rental, RentalService $service)
     {
-        $data = $request->validate(['condition' => ['required', Rule::in(['available', 'resting', 'unavailable'])]]);
+        $data = $request->validate([
+            'condition' => [
+                'required',
+                Rule::in(['available', 'resting', 'unavailable']),
+            ],
+        ]);
+
+        // Selesaikan transaksi rental terlebih dahulu.
         $service->complete($rental, $request->user(), $data['condition']);
 
-        return back()->with('success', 'Pengembalian selesai. Status partner dan denda telah diperbarui.');
+        // Ambil data terbaru setelah transaksi berhasil disimpan.
+        $rental->refresh();
+        $rental->load('trainer', 'rentalDetails.pokemon');
+
+        // Kirim bukti penyelesaian PDF ke email Trainer.
+        try {
+            if (! $rental->trainer || ! $rental->trainer->email) {
+                throw new \RuntimeException('Email Trainer tidak ditemukan.');
+            }
+
+            Mail::to($rental->trainer->email)
+                ->send(new RentalCompletedMail($rental));
+
+        } catch (\Throwable $e) {
+            // Kegagalan email tidak membatalkan transaksi yang sudah selesai.
+            Log::error('Gagal mengirim bukti PDF rental', [
+                'rental_id' => $rental->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with(
+                'warning',
+                'Pengembalian berhasil diselesaikan, tetapi bukti PDF belum berhasil dikirim ke email Trainer.'
+            );
+        }
+
+        return back()->with(
+            'success',
+            'Pengembalian selesai! Bukti PDF berhasil dikirim melalui layanan email.'
+        );
     }
 
     public function report(Request $request)
@@ -89,18 +130,32 @@ class RentalController extends Controller
         return response()->streamDownload(function () use ($query) {
             $stream = fopen('php://output', 'w');
             fwrite($stream, "\xEF\xBB\xBF");
-            fputcsv($stream, ['ID', 'Trainer', 'Pokémon', 'Mulai', 'Jatuh Tempo', 'Status', 'Biaya Sewa', 'Denda'], ',', '"', '');
+
+            fputcsv($stream, [
+                'ID', 'Trainer', 'Pokémon', 'Mulai',
+                'Jatuh Tempo', 'Status', 'Biaya Sewa', 'Denda',
+            ], ',', '"', '');
+
             foreach ($query->orderBy('id')->lazy(200) as $rental) {
                 $safe = fn ($value) => preg_match('/^[=+@\-\t\r\n]/u', (string) $value) ? "'".$value : $value;
+
                 fputcsv($stream, array_map($safe, [
-                    $rental->id, $rental->trainer->full_name,
+                    $rental->id,
+                    $rental->trainer->full_name,
                     $rental->rentalDetails->pluck('pokemon.pokemon_name')->join(', '),
-                    $rental->start_date->toDateString(), $rental->due_date->toDateString(),
-                    $rental->rental_status, $rental->total_price, $rental->late_fee,
+                    $rental->start_date->toDateString(),
+                    $rental->due_date->toDateString(),
+                    $rental->rental_status,
+                    $rental->total_price,
+                    $rental->late_fee,
                 ]), ',', '"', '');
             }
+
             fclose($stream);
-        }, 'laporan-rental-'.today()->toDateString().'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+
+        }, 'laporan-rental-'.today()->toDateString().'.csv', [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
     }
 
     public function printReport(Request $request)

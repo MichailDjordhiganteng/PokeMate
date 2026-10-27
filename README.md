@@ -48,17 +48,24 @@ DB_PASSWORD=
 - Admin: CRUD Pokémon termasuk upload gambar dan relasi tipe; kelola tipe, trainer, dan akun admin; monitoring rental; pemeriksaan pengembalian; laporan dengan filter, cetak/simpan PDF, serta ekspor CSV yang dapat dibuka di Excel.
 - Trainer: katalog dan filter tipe/status, detail Pokémon, Adventure Match berdasarkan medan/anggaran, formulir sewa dengan kalkulator biaya, konfirmasi, bukti rental, rental aktif, riwayat, pengajuan pengembalian, serta edit profil/password.
 
+
 ## Aturan rental
 
-- Maksimal 2 partner dalam rental yang belum selesai per trainer; durasi 1–5 hari.
-- Partner harus berstatus `available`. Harga dihitung server dari tarif database, bukan harga dari browser.
-- Partner langsung menjadi `on_adventure` saat rental berhasil, termasuk untuk tanggal mulai mendatang.
-- Pengembalian hanya bisa diajukan pemilik rental setelah tanggal mulai. Partner tetap tidak tersedia sampai admin menyelesaikan pemeriksaan.
-- Admin menentukan kondisi partner: tersedia, istirahat, atau tidak tersedia.
-- Denda sementara: Rp 100.000 per hari kalender setelah tanggal jatuh tempo hingga tanggal pengajuan pengembalian. Waktu tunggu pemrosesan admin tidak menambah denda.
-- Transaksi dan row locking melindungi ketersediaan serta kuota pada database yang mendukungnya (MySQL/PostgreSQL).
-- Tipe yang masih digunakan dan trainer/Pokémon dengan riwayat rental tidak dapat dihapus.
-- Admin tidak dapat menghapus akun yang sedang digunakan atau akun admin dengan riwayat pemrosesan rental.
+- Batas maksimal Pokémon yang dapat disewa setiap Trainer bersifat dinamis dan dapat diubah Admin melalui halaman Kelola Trainer.
+- Pengaturan kuota disimpan pada tabel `rental_settings`, dengan nilai awal 2 Pokémon dan rentang pengaturan 1–20 Pokémon.
+- Kuota dihitung berdasarkan jumlah Pokémon pada rental yang belum selesai, yaitu status `pending`, `active`, `late`, dan `return_requested`.
+- Perubahan batas rental berlaku untuk penyewaan berikutnya. Rental yang sudah berjalan tidak otomatis dibatalkan jika Admin menurunkan batas.
+- Durasi penyewaan adalah 1–5 hari.
+- Pokémon harus berstatus `available` untuk dapat disewa.
+- Harga rental dihitung oleh server berdasarkan tarif Pokémon yang tersimpan di database.
+- Pokémon langsung berubah menjadi `on_adventure` ketika rental berhasil, termasuk untuk tanggal mulai mendatang.
+- Pengembalian hanya dapat diajukan oleh pemilik rental setelah tanggal mulai tiba.
+- Pokémon tetap tidak tersedia sampai Admin menyelesaikan pemeriksaan pengembalian.
+- Admin menentukan kondisi Pokémon setelah pengembalian: tersedia, istirahat, atau tidak tersedia.
+- Denda keterlambatan sebesar Rp 100.000 per hari kalender, dihitung sampai tanggal Trainer mengajukan pengembalian.
+- Proses rental menggunakan database transaction dan row locking untuk membantu menjaga konsistensi kuota dan ketersediaan Pokémon.
+- Setelah Admin menyelesaikan pengembalian, sistem mengirim bukti penyelesaian rental dalam format PDF ke email Trainer melalui Laravel Mail dan SMTP.
+- Kredensial email disimpan dalam konfigurasi `.env`, bukan dalam source code.
 
 Checklist telah dicocokkan dengan `Progress PokePartner - Google Spreadsheet.pdf` yang diberikan pengguna. Batas slot/durasi sesuai PDF; nominal denda mengikuti mockup. Denda saat ini dihitung per hari kalender, bukan toleransi per jam. Profil mendukung upload avatar. Gambar Pokémon demo memakai artwork PokeAPI dan memerlukan internet; gambar upload disajikan dari storage lokal.
 

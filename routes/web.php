@@ -20,28 +20,44 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+    // ROUTE ADMIN
     Route::prefix('admin')->name('admin.')->middleware(EnsureRole::class.':admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+
         Route::resource('pokemons', Admin\PokemonController::class)->except('show');
         Route::resource('types', Admin\TypeController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('trainers', Admin\TrainerController::class)->only(['index', 'update', 'destroy']);
         Route::resource('admins', Admin\AdminAccountController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        // Rental dan pengembalian Pokémon
         Route::get('/rentals', [Admin\RentalController::class, 'index'])->name('rentals.index');
         Route::get('/rentals/{rental}', [Admin\RentalController::class, 'show'])->name('rentals.show');
         Route::get('/returns', [Admin\RentalController::class, 'index'])->name('returns.index');
         Route::post('/returns/{rental}', [Admin\RentalController::class, 'complete'])->name('returns.complete');
+
+        // BARU: Pengaturan batas maksimal rental Pokémon
+        Route::get('/rental-settings', [Admin\RentalSettingController::class, 'index'])
+            ->name('rental-settings.index');
+
+        Route::put('/rental-settings', [Admin\RentalSettingController::class, 'update'])
+            ->name('rental-settings.update');
+
+        // Laporan rental
         Route::get('/reports', [Admin\RentalController::class, 'report'])->name('reports.index');
         Route::get('/reports/export', [Admin\RentalController::class, 'export'])->name('reports.export');
         Route::get('/reports/print', [Admin\RentalController::class, 'printReport'])->name('reports.print');
     });
 
+    // ROUTE TRAINER
     Route::prefix('trainer')->name('trainer.')->middleware(EnsureRole::class.':trainer')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'trainer'])->name('dashboard');
         Route::get('/catalog', [Trainer\CatalogController::class, 'index'])->name('catalog.index');
         Route::get('/catalog/{pokemon}', [Trainer\CatalogController::class, 'show'])->name('catalog.show');
         Route::get('/adventure-match', [Trainer\CatalogController::class, 'match'])->name('match');
+
         Route::get('/profile', [Trainer\ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [Trainer\ProfileController::class, 'update'])->name('profile.update');
+
         Route::get('/rentals', [Trainer\RentalController::class, 'index'])->name('rentals.index');
         Route::get('/rentals/history', [Trainer\RentalController::class, 'index'])->name('rentals.history');
         Route::get('/rentals/create/{pokemon}', [Trainer\RentalController::class, 'create'])->name('rentals.create');
